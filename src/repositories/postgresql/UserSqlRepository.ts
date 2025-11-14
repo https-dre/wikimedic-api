@@ -6,8 +6,8 @@ export class UserSqlRepository implements IUserRepository {
   constructor(private db: postgres.Sql) {}
 
   public async save(data: Omit<User, "id" | "createdAt">): Promise<void> {
-    await this.db`INSERT users (name, email, phone, password) 
-      VALUES (${data.name}, ${data.email}, ${data.phone || null}, ${data.password})`;
+    await this.db`INSERT INTO users (name, email, phone, password) 
+      VALUES (${data.name}, ${data.email}, ${data.phone ?? null}, ${data.password})`;
   }
 
   public async findByEmail(email: string): Promise<User | null> {

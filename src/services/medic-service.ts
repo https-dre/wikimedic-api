@@ -3,13 +3,11 @@ import { Medicamento, zMedicine } from "../models/Medicamento";
 import { IMedRepository } from "../repositories/.";
 import { BadResponse } from "../error-handler";
 import { mongo } from "../data/mongoDB/conn";
-import { StorageProvider } from "../providers/storage-provider";
 import { MultipartFile } from "@fastify/multipart";
 
 export class MedicService {
   constructor(
     private repository: IMedRepository,
-    private storage: StorageProvider
   ) {}
 
   async save(data: Omit<Medicamento, "id">) {
@@ -88,7 +86,7 @@ export class MedicService {
     await this.repository.update(update, id);
   }
 
-  async uploadMedicineImage(med_id: string, data: MultipartFile) {
+/*   async uploadMedicineImage(med_id: string, data: MultipartFile) {
     if (!(await this.repository.findById(med_id)))
       throw new BadResponse("Medicamento não encontrado.", 404);
 
@@ -107,5 +105,5 @@ export class MedicService {
       key: storageData.filename,
       url: storageData.url,
     });
-  }
+  } */
 }

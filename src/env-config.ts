@@ -9,9 +9,10 @@ const EnvConfig = new Map<string, string>(
 
 const envSchema = z.object({
   MONGO_URL: z.string().url(),
-  SUPABASE_URL: z.string().url(),
-  SUPABASE_KEY: z.string(),
-  IMAGE_BUCKET_NAME: z.string(),
+  BUCKET_NAME: z.string().optional(),
+  AWS_ACCESS_KEY_ID: z.string().optional(),
+  AWS_SECRET_ACCESS_KEY: z.string().optional(),
+  AWS_REGION: z.string().optional(),
   JWT_KEY: z.string(),
   APIKEY: z.string().optional(),
   PGUSER: z.string(),
@@ -30,15 +31,8 @@ const validateEnv = () => {
   }
 }
 
-const vars = ["MONGO_URL", "SUPABASE_URL", "SUPABASE_KEY", "IMAGE_BUCKET_NAME", "JWT_KEY","APIKEY"];
-
 export const verify_env = () => {
   logger.info("Checking environment...");
-  const missingVars = vars.filter((v) => !EnvConfig.has(v));
-  if (missingVars.length) {
-    logger.fatal(`Missing: ${missingVars.join(", ")}`);
-    process.exit(1);
-  }
   validateEnv();
   logger.info("Environment ok!");
 };

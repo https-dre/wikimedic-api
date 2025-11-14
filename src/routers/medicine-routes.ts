@@ -27,8 +27,7 @@ export const med_routes = async (app: FastifyInstance) => {
   );
 
   const medRepo = new MedicamentoRepository();
-  const storageProvider = new StorageProvider(process.env.IMAGE_BUCKET_NAME!);
-  const medService = new MedicService(medRepo, storageProvider);
+  const medService = new MedicService(medRepo);
   const medController = new FMedController(medService);
 
   // Grupo de rotas com prefixo /medicine

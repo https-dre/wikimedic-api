@@ -9,9 +9,11 @@ import {
   updateUserProfile,
   userLogin,
 } from "./schemas/user-schemas";
+import { UserSqlRepository } from "../repositories/postgresql/UserSqlRepository";
+import { db } from "../data/postgresql/db";
 
 export const user_routes = (app: FastifyInstance) => {
-  const userRepository = new UserRepository();
+  const userRepository = new UserSqlRepository(db);
   const userService = new UserService(userRepository, new JwtProvider());
   const userController = new UserController(userService);
 
