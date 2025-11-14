@@ -13,7 +13,12 @@ const envSchema = z.object({
   SUPABASE_KEY: z.string(),
   IMAGE_BUCKET_NAME: z.string(),
   JWT_KEY: z.string(),
-  APIKEY: z.string().optional()
+  APIKEY: z.string().optional(),
+  PGUSER: z.string(),
+  PGHOST: z.string(),
+  PGPASSWORD: z.string(),
+  PGDATABASE: z.string(),
+  PGSSLMODE: z.string()
 });
 
 const validateEnv = () => {
