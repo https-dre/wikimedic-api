@@ -14,7 +14,7 @@ export interface IMedRepository {
 }
 
 export interface IUserRepository {
-  save(data: Omit<User, "id">): Promise<void>;
+  save(data: Omit<User, "id" | "createdAt">): Promise<void>;
   delete(id: string): Promise<void>;
   findByEmail(email: string): Promise<User | null>;
   findById(id: string): Promise<User | null>;

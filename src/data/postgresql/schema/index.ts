@@ -1,7 +1,6 @@
 import { logger } from "../../../logger";
 import { db } from "../db";
 import { readFile } from "node:fs";
-import path from "node:path";
 
 const runSchema = async () => {
   let schemaContent: string = ""; 
