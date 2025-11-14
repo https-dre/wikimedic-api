@@ -7,7 +7,7 @@ import { IUserRepository } from "../repositories";
 export class UserService {
   constructor(private repository: IUserRepository, public jwt: JwtProvider) {}
 
-  async saveUser(data: Omit<User, "id">) {
+  async saveUser(data: Omit<User, "id" | "createdAt">) {
     if ((await this.repository.findByEmail(data.email)))
       throw new BadResponse("E-mail já cadastrado.");
 

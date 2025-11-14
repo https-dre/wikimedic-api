@@ -2,7 +2,7 @@ import { mongo as Database } from "./data/mongoDB/conn";
 import { logger } from "./logger";
 import { verify_env } from "./env-config";
 import { buildApp } from "./appBuild";
-
+import { testPostgreSqlConnection } from "./data/postgresql/db";
 const port = process.env.PORT || "7711";
 
 const run = async () => {
@@ -10,6 +10,7 @@ const run = async () => {
   const app = buildApp();
 
   await app.ready();
+  await testPostgreSqlConnection();
   await Database.conn();
 
   try {
