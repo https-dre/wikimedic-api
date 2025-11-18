@@ -9,7 +9,10 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS favorites (
   id TEXT PRIMARY KEY,
-  medicineId TEXT NOT NULL
+  medicineId TEXT NOT NULL,
+  userId TEXT NOT NULL,
+  medicineName TEXT NOT NULL,
+  FOREIGN KEY (userId) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS appointments (
@@ -20,6 +23,7 @@ CREATE TABLE IF NOT EXISTS appointments (
   repetition INTEGER NOT NULL,
   color TEXT NOT NULL,
   medicineId TEXT NOT NULL,
+  medicineName TEXT NOT NULL,
   userId TEXT NOT NULL,
   FOREIGN KEY (userId) REFERENCES users(id)
 );
