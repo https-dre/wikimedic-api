@@ -1,0 +1,10 @@
+services:
+  db:
+    container_name: postgres_wikimedic
+    image: postgres:17
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_DB: wikimedic
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
