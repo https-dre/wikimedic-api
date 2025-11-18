@@ -6,3 +6,19 @@ CREATE TABLE IF NOT EXISTS users (
   password TEXT NOT NULL,
   createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
 );
+
+CREATE TABLE IF NOT EXISTS favorites (
+  id TEXT PRIMARY KEY,
+  medicineId TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS appointments (
+  id TEXT PRIMARY KEY,
+  allDay BOOLEAN DEFAULT FALSE,
+  startTime TIMESTAMP,
+  endTime TIMESTAMP,
+  repetition INTEGER NOT NULL,
+  color TEXT NOT NULL
+  userId TEXT NOT NULL,
+  FOREIGN KEY (userId) REFERENCES users(id)
+);
