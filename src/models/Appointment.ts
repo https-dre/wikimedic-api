@@ -7,7 +7,8 @@ export const zAppointment = z.object({
   endTime: z.date().nullable(),
   repetition: z.coerce.number(),
   color: z.string(),
-  userId: z.string().uuid()
+  userId: z.string().uuid(),
+  medicineId: z.string().uuid()
 });
 
 export type Appointment = z.infer<typeof zAppointment>;
