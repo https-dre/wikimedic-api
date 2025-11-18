@@ -12,6 +12,7 @@ export const createUser = (service: UserService): FastifyPluginAsync => {
       {
         schema: {
           summary: "Create user",
+          tags: ["users"],
           body: z.object({
             user: zUser.omit({ id: true, createdAt: true }),
           }),
@@ -25,7 +26,7 @@ export const createUser = (service: UserService): FastifyPluginAsync => {
       async (req, reply) => {
         const { user } = req.body;
         const created = await service.saveUser(user);
-        
+        return reply.status(201).send({ userId: created.id });
       }
     );
   };
