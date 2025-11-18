@@ -6,4 +6,5 @@ export interface IAppointmentRepository {
   findByUserId(userId: string, page?: number, pageSize?: number): Promise<Appointment[]>;
   deleteById(id: string): Promise<void>;
   updateWithId(id: string, fields: Partial<Omit<Appointment, "id">>): Promise<void>;
+  findWithDateFilter(userId: string, filter: Date): Promise<Appointment[]>;
 }

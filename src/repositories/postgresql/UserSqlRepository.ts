@@ -5,9 +5,13 @@ import { User } from "../../models/User";
 export class UserSqlRepository implements IUserRepository {
   constructor(private db: postgres.Sql) {}
 
-  public async save(data: Omit<User, "id" | "createdAt">): Promise<void> {
-    await this.db`INSERT INTO users (name, email, phone, password) 
-      VALUES (${data.name}, ${data.email}, ${data.phone ?? null}, ${data.password})`;
+  public async save(data: Omit<User, "id" | "createdAt">): Promise<User> {
+    const [created]: User[] = await this
+      .db`INSERT INTO users (name, email, phone, password) 
+      VALUES (${data.name}, ${data.email}, ${data.phone ?? null}, ${
+      data.password
+    }) RETURNING *`;
+    return created;
   }
 
   public async findByEmail(email: string): Promise<User | null> {

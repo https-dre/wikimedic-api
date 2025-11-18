@@ -45,4 +45,22 @@ export class AppointmentRepository implements IAppointmentRepository {
       fields
     )} WHERE id = ${id}`;
   }
+
+  public async findWithDateFilter(
+    userId: string,
+    filter: Date
+  ): Promise<Appointment[]> {
+    const startOfDay = new Date(filter).setHours(0, 0, 0, 0);
+    const endOfDay = new Date(filter).setHours(23, 59, 59, 999);
+
+    const result: Appointment[] = await this.sql`
+      SELECT *
+      FROM appointments
+      WHERE userId = ${userId}
+        AND startTime >= ${startOfDay}
+        AND startTime <= ${endOfDay}
+    `;
+
+    return result;
+  }
 }
