@@ -14,7 +14,8 @@ export class UserService {
     if (data.password.length < 8) {
       throw new BadResponse("A senha deve ter mais de 8 caracteres.");
     }
-    await this.repository.save(data);
+    const created = await this.repository.save(data);
+    return created;
   }
 
   async deleteUser(email: string) {
@@ -23,15 +24,15 @@ export class UserService {
     await this.repository.delete(userWithEmail.id);
   }
 
-  async updateWithEmail(
-    email: string,
+  async updateUserById(
+    id: string,
     updatedFields: Partial<Omit<User, "id">>
   ) {
-    const userWithEmail = await this.repository.findByEmail(email);
-    if (!userWithEmail)
+    const userWithId = await this.repository.findById(id);
+    if (!userWithId)
       return new BadResponse("Nenhum usuário encontrado.", 404);
 
-    await this.repository.updateById(userWithEmail.id, updatedFields);
+    await this.repository.updateById(userWithId.id, updatedFields);
   }
 
   async genAuth(email: string, password: string, tokenAge?: "1h") {
