@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS favorites (
   medicineId TEXT NOT NULL,
   userId TEXT NOT NULL,
   medicineName TEXT NOT NULL,
-  FOREIGN KEY (userId) REFERENCES users(id)
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS appointments (
@@ -25,5 +25,5 @@ CREATE TABLE IF NOT EXISTS appointments (
   medicineId TEXT NOT NULL,
   medicineName TEXT NOT NULL,
   userId TEXT NOT NULL,
-  FOREIGN KEY (userId) REFERENCES users(id)
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 );

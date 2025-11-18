@@ -1,18 +1,12 @@
+import path from "path";
 import { logger } from "../../../logger";
 import { db } from "../db";
-import { readFile } from "node:fs";
+import * as fs from "node:fs";
 
 const runSchema = async () => {
-  let schemaContent: string = ""; 
-  readFile(__dirname + "/schema.sql", (err, data) => {
-    if(err) {
-      logger.fatal(err);
-      process.exit(1);
-    }
-    schemaContent = data.toLocaleString();
-    console.log(schemaContent);
-  });
   try {
+    const schemaFilePath = path.join(__dirname, 'schema.sql');
+    const schemaContent = fs.readFileSync(schemaFilePath, 'utf-8');
     logger.info("Executing SQL Schema...");
     await db.unsafe(schemaContent)
     logger.info("Schema applied!");
