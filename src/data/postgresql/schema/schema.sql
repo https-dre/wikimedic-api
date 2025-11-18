@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS appointments (
   startTime TIMESTAMP,
   endTime TIMESTAMP,
   repetition INTEGER NOT NULL,
-  color TEXT NOT NULL
+  color TEXT NOT NULL,
+  medicineId TEXT NOT NULL,
   userId TEXT NOT NULL,
   FOREIGN KEY (userId) REFERENCES users(id)
 );
