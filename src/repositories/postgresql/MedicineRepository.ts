@@ -1,13 +1,19 @@
 import postgres from "postgres";
 import { IMedRepository } from "../defs/medicine";
 import { Medicine, MedicineWithoutLeaflet } from "@/models/Medicamento";
+import { randomUUID } from "node:crypto";
 
 export class MedicineRepository implements IMedRepository {
   constructor(private sql: postgres.Sql) {}
 
-  public async save(med: Omit<Medicine, "id">): Promise<Medicine> {
+  public async save(med: Omit<Medicine, "id" | "created_at">): Promise<Medicine> {
+    const toBeSaved = {
+      ...med,
+      id: randomUUID()
+    }
+
     const [created]: Medicine[] = await this
-      .sql`INSERT INTO medicines ${this.sql(med)} RETURNING *`;
+      .sql`INSERT INTO medicines ${this.sql(toBeSaved)} RETURNING *`;
     return created;
   }
 
