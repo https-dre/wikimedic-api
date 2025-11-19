@@ -1,4 +1,3 @@
-import { mongo as Database } from "./data/mongoDB/conn";
 import { logger } from "./logger";
 import { verify_env } from "./env-config";
 import { buildApp } from "./appBuild";
@@ -11,7 +10,6 @@ const run = async () => {
 
   await app.ready();
   await testPostgreSqlConnection();
-  await Database.conn();
 
   try {
     const address = await app.listen({ port: Number(port), host: "0.0.0.0" });
