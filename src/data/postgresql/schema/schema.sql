@@ -33,5 +33,6 @@ CREATE TABLE IF NOT EXISTS medicines (
   commercial_name VARCHAR(255) NOT NULL,
   registry_code VARCHAR(100) UNIQUE NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  description TEXT NOT NULL,
   leaflet_data JSONB
 );
