@@ -27,3 +27,11 @@ CREATE TABLE IF NOT EXISTS appointments (
   userId TEXT NOT NULL,
   FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS medicines (
+  id TEXT PRIMARY KEY,
+  commercial_name VARCHAR(255) NOT NULL,
+  registry_code VARCHAR(100) UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  leaflet_data JSONB
+);
