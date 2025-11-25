@@ -9,7 +9,7 @@ export const zAppointment = z.object({
   color: z.string(),
   userId: z.string().uuid(),
   medicineId: z.string().uuid(),
-  medicineName: z.string()
+  medicineName: z.string().optional()
 });
 
 export type Appointment = z.infer<typeof zAppointment>;
