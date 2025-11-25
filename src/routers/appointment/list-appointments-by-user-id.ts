@@ -1,28 +1,31 @@
+import { zAppointment } from "@/models/Appointment";
+import { AppointmentService } from "@/services/appointment-service";
 import { FastifyPluginAsync } from "fastify";
-import { AppointmentService } from "../../services/appointment-service";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import z from "zod";
-import { zAppointment } from "../../models/Appointment";
+import { z } from "zod";
 
-export const listUserAppointments = (
-  service: AppointmentService
+export const listAppointmentsByUserId = (
+  service: AppointmentService,
 ): FastifyPluginAsync => {
   return async (app) => {
     app.withTypeProvider<ZodTypeProvider>().get(
       "/users/:userId/appointments",
       {
         schema: {
-          summary: "List user appointments",
-          tags: ["users"],
+          summary: "Get user appointments",
+          tags: ["appointments", "users"],
           params: z.object({
             userId: z.string().uuid(),
           }),
           querystring: z.object({
-            page: z.coerce.number().default(1),
-            pageSize: z.coerce.number().default(10),
+            page: z.coerce.number().optional().default(1),
+            pageSize: z.coerce.number().optional().default(10),
           }),
           response: {
             200: z.object({
+              page: z.number().optional(),
+              pageSize: z.number().optional(),
+              count: z.number().optional(),
               appointments: z.array(zAppointment),
             }),
           },
@@ -34,10 +37,12 @@ export const listUserAppointments = (
         const appointments = await service.listWithUserId(
           userId,
           page,
-          pageSize
+          pageSize,
         );
-        return reply.status(200).send({ appointments });
-      }
+        return reply
+          .status(200)
+          .send({ page, pageSize, appointments, count: appointments.length });
+      },
     );
   };
 };
