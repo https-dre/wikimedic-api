@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { logger } from "./logger";
 
 const EnvConfig = new Map<string, string>(
@@ -6,15 +7,33 @@ const EnvConfig = new Map<string, string>(
   )
 );
 
-const vars = ["MONGO_URL", "SUPABASE_URL", "SUPABASE_KEY", "IMAGE_BUCKET_NAME", "JWT_KEY","APIKEY"];
+const envSchema = z.object({
+  MONGO_URL: z.string().url(),
+  BUCKET_NAME: z.string().optional(),
+  AWS_ACCESS_KEY_ID: z.string().optional(),
+  AWS_SECRET_ACCESS_KEY: z.string().optional(),
+  AWS_REGION: z.string().optional(),
+  JWT_KEY: z.string(),
+  APIKEY: z.string().optional(),
+  PGUSER: z.string(),
+  PGHOST: z.string(),
+  PGPASSWORD: z.string(),
+  PGDATABASE: z.string(),
+  PGSSLMODE: z.string()
+});
+
+const validateEnv = () => {
+  const { success, error } = envSchema.safeParse(process.env);
+  if(!success) {
+    logger.fatal("Environment check fails");
+    logger.error(error);
+    process.exit(1);
+  }
+}
 
 export const verify_env = () => {
   logger.info("Checking environment...");
-  const missingVars = vars.filter((v) => !EnvConfig.has(v));
-  if (missingVars.length) {
-    logger.fatal(`Missing: ${missingVars.join(", ")}`);
-    process.exit(1);
-  }
+  validateEnv();
   logger.info("Environment ok!");
 };
 

@@ -7,7 +7,8 @@
     "dev": "tsx watch --env-file .env src/Server.ts",
     "lint": "eslint . --ext .ts",
     "build": "tsup src --format esm",
-    "start": "node ./dist/Server.mjs"
+    "start": "node ./dist/Server.mjs",
+    "sql:schema": "tsx --env-file .env src/data/postgresql/schema/index.ts"
   },
   "author": "André de Oliveira Dias",
   "license": "ISC",
@@ -27,6 +28,7 @@
     "nodemailer": "^6.9.7",
     "pino": "^9.8.0",
     "pino-pretty": "^13.1.1",
+    "postgres": "^3.4.7",
     "uuid": "^11.1.0",
     "zod": "^3.25.67"
   },

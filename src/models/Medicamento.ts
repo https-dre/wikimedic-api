@@ -23,3 +23,25 @@ export const zMedicine = z.object({
 
 export type Medicamento = z.infer<typeof zMedicine>;
 export type MedicineImage = z.infer<typeof zImage>;
+
+export const zLeaflet = z.object({
+  indicacoes: z.array(z.string()),
+  contraindicacoes: z.array(z.string()),
+  reacoes_adversas: z.array(z.string()),
+  cuidados: z.array(z.string()),
+  posologia: z.array(z.string()),
+  riscos: z.array(z.string()),
+  superdose: z.array(z.string())
+});
+
+export const zSqlMedicine = z.object({
+  id: z.string().uuid(),
+  commercial_name: z.string(),
+  description: z.string(),
+  registry_code: z.string(),
+  created_at: z.date(),
+  leaflet_data: zLeaflet
+})
+
+export type Medicine = z.infer<typeof zSqlMedicine>;
+export type MedicineWithoutLeaflet = Omit<Medicine, "leaflet_data">;

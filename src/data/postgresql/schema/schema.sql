@@ -1,0 +1,38 @@
+CREATE TABLE IF NOT EXISTS users (
+  id TEXT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(20),
+  password TEXT NOT NULL,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+);
+
+CREATE TABLE IF NOT EXISTS favorites (
+  id TEXT PRIMARY KEY,
+  medicineId TEXT NOT NULL,
+  userId TEXT NOT NULL,
+  medicineName TEXT NOT NULL,
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS appointments (
+  id TEXT PRIMARY KEY,
+  allDay BOOLEAN DEFAULT FALSE,
+  startTime TIMESTAMP,
+  endTime TIMESTAMP,
+  repetition INTEGER NOT NULL,
+  color TEXT NOT NULL,
+  medicineId TEXT NOT NULL,
+  medicineName TEXT NOT NULL,
+  userId TEXT NOT NULL,
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS medicines (
+  id TEXT PRIMARY KEY,
+  commercial_name VARCHAR(255) NOT NULL,
+  registry_code VARCHAR(100) UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  description TEXT NOT NULL,
+  leaflet_data JSONB
+);
