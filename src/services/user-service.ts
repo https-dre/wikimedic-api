@@ -7,7 +7,7 @@ import { IUserRepository } from "../repositories";
 export class UserService {
   constructor(private repository: IUserRepository, public jwt: JwtProvider) {}
 
-  async saveUser(data: Omit<User, "id" | "createdAt">) {
+  async saveUser(data: Omit<User, "id" | "created_at">) {
     if (await this.repository.findByEmail(data.email))
       throw new BadResponse("E-mail já cadastrado.");
 
@@ -58,5 +58,14 @@ export class UserService {
       }
       throw err;
     }
+  }
+
+  public async getUserById(userId: string): Promise<Omit<User, "password">> {
+    const userWithId = await this.repository.findById(userId);
+    if (!userWithId) {
+      throw new BadResponse("Usuário não encontrado", 404);
+    }
+    const { password, ...user } = userWithId;
+    return user;
   }
 }

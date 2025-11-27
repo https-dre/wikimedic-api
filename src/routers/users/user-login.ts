@@ -18,7 +18,7 @@ export const userLogin = (service: UserService): FastifyPluginAsync => {
           }),
           response: {
             201: z.object({
-              token: z.string().jwt(),
+              token: z.string(),
               user: zUser.omit({ password: true }),
             }),
           },
@@ -27,6 +27,7 @@ export const userLogin = (service: UserService): FastifyPluginAsync => {
       async (req, reply) => {
         const { email, password } = req.body;
         const payload = await service.genAuth(email, password);
+        console.log(payload);
         return reply.status(201).send(payload);
       }
     );

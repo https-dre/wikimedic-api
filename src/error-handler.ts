@@ -27,6 +27,7 @@ type FastifyErrorHandler = FastifyInstance["errorHandler"];
 
 export const ServerErrorHandler: FastifyErrorHandler = (error, _, reply) => {
   if (error instanceof ZodError) {
+    console.error(error);
     return reply.status(400).send({
       message: `Error during validating`,
       errors: error.flatten().fieldErrors,
