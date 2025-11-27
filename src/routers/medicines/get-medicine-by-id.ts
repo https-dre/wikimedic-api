@@ -1,4 +1,4 @@
-import { zSqlMedicine } from "@/models/Medicamento";
+import { zSqlMedicine } from "@/models/Medicine";
 import { MedicService } from "@/services/medic-service";
 import { FastifyPluginAsync } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";

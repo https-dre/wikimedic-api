@@ -40,6 +40,7 @@ export const zSqlMedicine = z.object({
   description: z.string(),
   registry_code: z.string(),
   created_at: z.date(),
+  categories: z.array(z.string()).optional(),
   leaflet_data: zLeaflet
 })
 

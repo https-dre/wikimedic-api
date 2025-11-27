@@ -1,16 +1,18 @@
 import postgres from "postgres";
 import { IMedRepository } from "../defs/medicine";
-import { Medicine, MedicineWithoutLeaflet } from "@/models/Medicamento";
+import { Medicine, MedicineWithoutLeaflet } from "@/models/Medicine";
 import { randomUUID } from "node:crypto";
 
 export class MedicineRepository implements IMedRepository {
   constructor(private sql: postgres.Sql) {}
 
-  public async save(med: Omit<Medicine, "id" | "created_at">): Promise<Medicine> {
+  public async save(
+    med: Omit<Medicine, "id" | "created_at">
+  ): Promise<Medicine> {
     const toBeSaved = {
       ...med,
-      id: randomUUID()
-    }
+      id: randomUUID(),
+    };
 
     const [created]: Medicine[] = await this
       .sql`INSERT INTO medicines ${this.sql(toBeSaved)} RETURNING *`;
@@ -25,9 +27,26 @@ export class MedicineRepository implements IMedRepository {
     page: number = 1,
     pageSize: number = 10
   ): Promise<MedicineWithoutLeaflet[]> {
-    const medicines: MedicineWithoutLeaflet[] = await this
-      .sql`SELECT id, commercial_name, registry_code, created_at, description
-      FROM medicines LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}`;
+    const medicines = await this.sql<MedicineWithoutLeaflet[]>`
+      SELECT 
+        m.id, 
+        m.commercial_name, 
+        m.registry_code, 
+        m.created_at,
+        m.description, 
+        COALESCE(
+          JSON_AGG(c.name) FILTER (WHERE c.name IS NOT NULL), 
+          '[]'
+        ) AS categories
+      FROM medicines m
+      LEFT JOIN medicine_category mc ON m.id = mc.medicine_id
+      LEFT JOIN categories c ON mc.category_id = c.id
+      GROUP BY m.id
+      ORDER BY m.created_at DESC 
+      LIMIT ${pageSize} 
+      OFFSET ${(page - 1) * pageSize}
+    `;
+
     return medicines;
   }
 
