@@ -14,7 +14,7 @@ export const createUser = (service: UserService): FastifyPluginAsync => {
           summary: "Create user",
           tags: ["users"],
           body: z.object({
-            user: zUser.omit({ id: true, createdAt: true }),
+            user: zUser.omit({ id: true, created_at: true }),
           }),
           response: {
             201: z.object({

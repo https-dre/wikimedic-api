@@ -36,3 +36,15 @@ CREATE TABLE IF NOT EXISTS medicines (
   description TEXT NOT NULL,
   leaflet_data JSONB
 );
+
+CREATE TABLE IF NOT EXISTS categories (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  slug TEXT UNIQUE,
+  color_code TEXT
+);
+
+CREATE TABLE IF NOT EXISTS medicine_category (
+  medicine_id TEXT NOT NULL,
+  category_id TEXT NOT NULL
+)

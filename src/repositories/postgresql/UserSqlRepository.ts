@@ -1,22 +1,21 @@
 import postgres from "postgres";
 import { IUserRepository } from "..";
 import { User } from "../../models/User";
+import { randomUUID } from "node:crypto";
 
 export class UserSqlRepository implements IUserRepository {
   constructor(private db: postgres.Sql) {}
 
-  public async save(data: Omit<User, "id" | "createdAt">): Promise<User> {
-    const [created]: User[] = await this
-      .db`INSERT INTO users (name, email, phone, password) 
-      VALUES (${data.name}, ${data.email}, ${data.phone ?? null}, ${
-      data.password
-    }) RETURNING *`;
+  public async save(data: Omit<User, "id" | "created_at">): Promise<User> {
+    const toBeCreated = { ...data, id: randomUUID() };
+    const [created]: User[] = await this.db`INSERT INTO users 
+    ${this.db(toBeCreated)} RETURNING *`;
     return created;
   }
 
   public async findByEmail(email: string): Promise<User | null> {
-    const [user]: User[] = await this
-      .db`SELECT * FROM users WHERE email = ${email}`;
+    const [user]: User[] = await this.db`SELECT * 
+        FROM users WHERE email = ${email}`;
     return user;
   }
 

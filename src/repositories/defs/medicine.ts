@@ -1,4 +1,4 @@
-import { Medicine, MedicineWithoutLeaflet } from "../../models/Medicamento";
+import { Medicine, MedicineWithoutLeaflet } from "../../models/Medicine";
 
 export interface IMedRepository {
   findByRegistryCode(registro: string): Promise<Medicine | null>;

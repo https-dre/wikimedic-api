@@ -1,4 +1,4 @@
-import { Medicine, MedicineWithoutLeaflet } from "../models/Medicamento";
+import { Medicine, MedicineWithoutLeaflet } from "../models/Medicine";
 import { IMedRepository } from "../repositories/.";
 import { BadResponse } from "../error-handler";
 
