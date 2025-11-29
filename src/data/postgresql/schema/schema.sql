@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS medicine_images (
   id TEXT PRIMARY KEY,
   url TEXT NOT NULL,
   medicine_id TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (medicine_id) REFERENCES medicines(id) ON DELETE SET NULL
 );
 
