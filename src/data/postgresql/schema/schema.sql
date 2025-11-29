@@ -4,28 +4,20 @@ CREATE TABLE IF NOT EXISTS users (
   email VARCHAR(255) NOT NULL,
   phone VARCHAR(20),
   password TEXT NOT NULL,
-  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
-);
-
-CREATE TABLE IF NOT EXISTS favorites (
-  id TEXT PRIMARY KEY,
-  medicineId TEXT NOT NULL,
-  userId TEXT NOT NULL,
-  medicineName TEXT NOT NULL,
-  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
 );
 
 CREATE TABLE IF NOT EXISTS appointments (
   id TEXT PRIMARY KEY,
-  allDay BOOLEAN DEFAULT FALSE,
-  startTime TIMESTAMP,
-  endTime TIMESTAMP,
+  all_days BOOLEAN DEFAULT FALSE,
+  start_time TIMESTAMP,
+  end_time TIMESTAMP,
   repetition INTEGER NOT NULL,
   color TEXT NOT NULL,
-  medicineId TEXT NOT NULL,
-  medicineName TEXT NOT NULL,
-  userId TEXT NOT NULL,
-  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  medicine_id TEXT NOT NULL,
+  medicine_name TEXT NOT NULL,
+  user_id TEXT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS medicines (
@@ -37,6 +29,14 @@ CREATE TABLE IF NOT EXISTS medicines (
   leaflet_data JSONB
 );
 
+CREATE TABLE IF NOT EXISTS favorites (
+  id TEXT PRIMARY KEY,
+  medicine_id TEXT NOT NULL,
+  user_id TEXT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (medicine_id) REFERENCES medicines(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS categories (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL UNIQUE,
@@ -46,5 +46,7 @@ CREATE TABLE IF NOT EXISTS categories (
 
 CREATE TABLE IF NOT EXISTS medicine_category (
   medicine_id TEXT NOT NULL,
-  category_id TEXT NOT NULL
-)
+  category_id TEXT NOT NULL,
+  FOREIGN KEY (medicine_id) REFERENCES medicines(id) ON DELETE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+);
