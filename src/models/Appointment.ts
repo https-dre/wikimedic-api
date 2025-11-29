@@ -2,14 +2,14 @@ import { z } from "zod";
 
 export const zAppointment = z.object({
   id: z.string().uuid(),
-  allDay: z.boolean().default(false),
-  startTime: z.date().nullable(),
-  endTime: z.date().nullable(),
+  all_days: z.boolean().default(false),
+  start_time: z.date().nullable(),
+  end_time: z.date().nullable(),
   repetition: z.coerce.number(),
   color: z.string(),
-  userId: z.string().uuid(),
-  medicineId: z.string().uuid(),
-  medicineName: z.string().optional()
+  user_id: z.string().uuid(),
+  medicine_id: z.string().uuid(),
+  medicine_name: z.string().optional()
 });
 
 export type Appointment = z.infer<typeof zAppointment>;
