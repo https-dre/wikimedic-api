@@ -18,10 +18,10 @@ export class UserService {
     return created;
   }
 
-  async deleteUser(email: string) {
-    const userWithEmail = await this.repository.findByEmail(email);
-    if (!userWithEmail) throw new BadResponse("Usuário não encontrado.", 404);
-    await this.repository.delete(userWithEmail.id);
+  async deleteUser(id: string) {
+    const userWithId = await this.repository.findById(id);
+    if (!userWithId) throw new BadResponse("Usuário não encontrado.", 404);
+    await this.repository.delete(userWithId.id);
   }
 
   async updateUserById(id: string, updatedFields: Partial<Omit<User, "id">>) {
