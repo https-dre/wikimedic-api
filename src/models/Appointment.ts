@@ -6,6 +6,8 @@ export const zAppointment = z.object({
   start_time: z.date().nullable(),
   end_time: z.date().nullable(),
   repetition: z.coerce.number(),
+  amount: z.coerce.number(),
+  dosage_unit: z.string(),
   color: z.string(),
   user_id: z.string().uuid(),
   medicine_id: z.string().uuid(),
