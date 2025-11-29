@@ -37,11 +37,17 @@ export class MedicineRepository implements IMedRepository {
         COALESCE(
           JSON_AGG(c.name) FILTER (WHERE c.name IS NOT NULL), 
           '[]'
-        ) AS categories
+        ) AS categories,
+        mi.url AS image
       FROM medicines m
+      LEFT JOIN LATERAL (
+        SELECT url FROM medicine_images img
+        WHERE img.medicine_id = m.id
+        ORDER BY img.created_at ASC
+      ) mi ON TRUE
       LEFT JOIN medicine_category mc ON m.id = mc.medicine_id
       LEFT JOIN categories c ON mc.category_id = c.id
-      GROUP BY m.id
+      GROUP BY m.id, mi.url
       ORDER BY m.created_at DESC 
       LIMIT ${pageSize} 
       OFFSET ${(page - 1) * pageSize}
