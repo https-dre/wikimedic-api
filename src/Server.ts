@@ -7,9 +7,7 @@ const port = process.env.PORT || "7711";
 const run = async () => {
   verify_env();
   const app = buildApp();
-
-  await app.ready();
-  await testPostgreSqlConnection();
+  const testPromise = testPostgreSqlConnection();
 
   try {
     const address = await app.listen({ port: Number(port), host: "0.0.0.0" });
@@ -18,6 +16,7 @@ const run = async () => {
     logger.fatal(err);
     process.exit(1);
   }
+  await testPromise;
 };
 
 run();
