@@ -51,7 +51,7 @@ export const buildApp = () => {
     }
   }); */
   app.register(import("@scalar/fastify-api-reference"), {
-    routePrefix: "/docs",
+    routePrefix: "/openapi",
     configuration: {
       theme: "kepler",
     },
