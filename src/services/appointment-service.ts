@@ -1,5 +1,5 @@
 import { BadResponse } from "../error-handler";
-import { Appointment } from "../models/Appointment";
+import { Appointment, DoseRecord } from "../models/Appointment";
 import {
   IAppointmentRepository,
   IMedRepository,
@@ -14,10 +14,14 @@ export class AppointmentService {
   ) {}
 
   public async save(data: Omit<Appointment, "id">) {
-    if (!(await this.medicineRepository.findById(data.medicineId))) {
+    const [medicine, user] = await Promise.all([
+      this.medicineRepository.findById(data.medicine_id),
+      this.userRepository.findById(data.user_id),
+    ]);
+    if (!medicine) {
       throw new BadResponse("Medicamento não registrado.", 404);
     }
-    if (!(await this.appointmentRepository.findById(data.userId))) {
+    if (!user) {
       throw new BadResponse("Usuário não encontrado.", 404);
     }
 
@@ -57,5 +61,12 @@ export class AppointmentService {
       filter
     );
     return appointments;
+  }
+
+  public async pushDoseRecord(data: Omit<DoseRecord, "id">) {
+    if(!await this.appointmentRepository.findById(data.appointment_id))
+      throw new BadResponse("Agendamento não encontrado.", 404);
+
+    
   }
 }

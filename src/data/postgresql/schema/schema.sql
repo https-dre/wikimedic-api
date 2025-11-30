@@ -27,9 +27,10 @@ CREATE TABLE IF NOT EXISTS medicine_images (
 CREATE TABLE IF NOT EXISTS appointments (
   id TEXT PRIMARY KEY,
   all_days BOOLEAN DEFAULT FALSE, -- se for tomar todos os dias
-  start_time TIMESTAMP, -- quando começa
+  start_time TIMESTAMP NOT NULL, -- quando começa
   end_time TIMESTAMP, -- quando termina
-  repetition INTEGER NOT NULL, -- se repete por x dias
+  repetition REAL NOT NULL, -- se repete por x dias
+  repetition_unit TEXT NOT NULL, -- 'HOUR', 'DAY', 'WEEK', etc.
   color TEXT NOT NULL, -- apenas uma cor,
   amount REAL, -- dose (ex: 3 comprimidos, 2 ml, 5 gotas)
   dosage_unit TEXT NOT NULL, -- tipo de dose (gotas, ml ou comprimidos)
