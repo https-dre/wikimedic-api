@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { ZodError } from "zod";
-import { logger } from "./logger";
+import { logger } from "@/lib/logger";
 
 export class BadResponse extends Error {
   public response: string | object;

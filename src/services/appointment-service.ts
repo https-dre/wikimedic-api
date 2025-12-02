@@ -1,14 +1,14 @@
 import { endOfMonth, startOfMonth } from "date-fns";
-import { BadResponse } from "../error-handler";
+import { BadResponse } from "@/lib/errors/error-handler";
 import { Appointment, DoseRecord } from "../models/Appointment";
 import {
   IAppointmentRepository,
   IDoseRecordRepository,
   IMedRepository,
   IUserRepository,
-} from "../repositories";
-import { calculateExpectedDoses } from "@/functions/calculate-expect-doses";
-import { TreatmentSummary_Item } from "@/types/appointment";
+} from "@/lib/repositories";
+import { calculateExpectedDoses } from "@/lib/functions/calculate-expect-doses";
+import { TreatmentSummary_Item } from "@/lib/types/appointment";
 
 export class AppointmentService {
   constructor(

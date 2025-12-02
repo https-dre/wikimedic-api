@@ -2,7 +2,7 @@ import { FastifyPluginAsync } from "fastify";
 import { UserService } from "../../services/user-service";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
-import { zUser } from "../../models/User";
+import { zUser } from "@/models/User";
 
 export const updateUser = (service: UserService): FastifyPluginAsync => {
   return async (app) => {

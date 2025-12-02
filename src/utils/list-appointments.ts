@@ -1,4 +1,4 @@
-import { db } from "@/data/postgresql/db";
+import { db } from "@/infra/sql";
 import { Appointment } from "@/models/Appointment";
 
 export const listAppointments = async () => {

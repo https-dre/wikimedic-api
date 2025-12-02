@@ -1,6 +1,6 @@
 import { Medicine, MedicineWithoutLeaflet } from "../models/Medicine";
-import { IMedRepository } from "../repositories/.";
-import { BadResponse } from "../error-handler";
+import { IMedRepository } from "@/lib/repositories/.";
+import { BadResponse } from "@/lib/errors/error-handler";
 
 export class MedicService {
   constructor(private repository: IMedRepository) {}

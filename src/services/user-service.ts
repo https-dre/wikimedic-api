@@ -1,8 +1,8 @@
 import Jwt from "jsonwebtoken";
-import { BadResponse } from "../error-handler";
+import { BadResponse } from "@/lib/errors/error-handler";
 import { User } from "../models/User";
-import { JwtProvider } from "../providers/crypto-provider";
-import { IUserRepository } from "../repositories";
+import { JwtProvider } from "../lib/providers/crypto-provider";
+import { IUserRepository } from "@/lib/repositories";
 
 export class UserService {
   constructor(private repository: IUserRepository, public jwt: JwtProvider) {}

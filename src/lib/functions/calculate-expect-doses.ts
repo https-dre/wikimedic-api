@@ -1,5 +1,5 @@
 import { addHours, addDays, isBefore } from "date-fns";
-import { Treatment } from "@/types/appointment";
+import { Treatment } from "@/lib/types/appointment";
 
 function advance(cursor: Date, t: Treatment) {
   if (t.repeat_unit === "HOURS") {

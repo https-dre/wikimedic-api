@@ -1,6 +1,6 @@
 import postgres from "postgres";
 import { IUserRepository } from "..";
-import { User } from "../../models/User";
+import { User } from "@/models/User";
 import { randomUUID } from "node:crypto";
 
 export class UserSqlRepository implements IUserRepository {

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { UserService } from "../../services/user-service";
 import { FastifyPluginAsync } from "fastify";
-import { zUser } from "../../models/User";
+import { zUser } from "@/models/User";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 
 export const createUser = (service: UserService): FastifyPluginAsync => {
