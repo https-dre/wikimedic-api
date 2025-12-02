@@ -5,7 +5,7 @@ export const zTreatment = z.object({
   start_time: z.coerce.date(),
   end_time: z.coerce.date(),
   repetition: z.coerce.number(),
-  repetition_unit: z.string(),
+  repeat_unit: z.string(),
   amount: z.coerce.number(),
   dosage_unit: z.string(),
   color: z.string(),

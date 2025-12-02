@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS appointments (
   start_time TIMESTAMP NOT NULL, -- quando começa
   end_time TIMESTAMP, -- quando termina
   repetition REAL NOT NULL, -- se repete a cada x dias/horas/semanas
-  repetition_unit TEXT NOT NULL, -- 'HOUR', 'DAY', 'WEEK', etc.
+  repeat_unit TEXT NOT NULL, -- 'HOUR', 'DAY', 'WEEK', etc.
   color TEXT NOT NULL, -- apenas uma cor,
   amount REAL, -- dose (ex: 3 comprimidos, 2 ml, 5 gotas)
   dosage_unit TEXT NOT NULL, -- tipo de dose (gotas, ml ou comprimidos)

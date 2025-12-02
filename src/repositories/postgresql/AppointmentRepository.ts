@@ -80,7 +80,7 @@ export class AppointmentRepository implements IAppointmentRepository {
             a.start_time,
             a.end_time,
             a.repetition,
-            a.repetition_unit,
+            a.repeat_unit,
             a.amount,
             a.dosage_unit,
             a.color,

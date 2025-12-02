@@ -6,7 +6,7 @@ export const zAppointment = z.object({
   start_time: z.coerce.date().nullable(),
   end_time: z.coerce.date().nullable(),
   repetition: z.coerce.number(),
-  repetition_unit: z.enum(["HOURS", "DAYS", "WEEKS", "MONTHS"]),
+  repeat_unit: z.enum(["HOURS", "DAYS", "WEEKS", "MONTHS"]),
   amount: z.coerce.number(),
   dosage_unit: z.string(),
   color: z.string(),

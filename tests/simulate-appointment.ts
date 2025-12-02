@@ -12,7 +12,7 @@ const simulate = async () => {
         start_time: new Date().toISOString(),
         end_time: addDays(new Date(), 5).toISOString(),
         repetition: 4,
-        repetition_unit: "HOURS",
+        repeat_unit: "HOURS",
         amount: 30,
         dosage_unit: "mg",
         color: "green",

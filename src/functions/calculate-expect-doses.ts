@@ -2,16 +2,16 @@ import { addHours, addDays, isBefore } from "date-fns";
 import { Treatment } from "@/types/appointment";
 
 function advance(cursor: Date, t: Treatment) {
-  if (t.repetition_unit === "HOURS") {
+  if (t.repeat_unit === "HOURS") {
     return addHours(cursor, t.repetition);
   }
-  if (t.repetition_unit === "DAYS") {
+  if (t.repeat_unit === "DAYS") {
     return addDays(cursor, t.repetition);
   }
-  if (t.repetition_unit === "WEEKS") {
+  if (t.repeat_unit === "WEEKS") {
     return addDays(cursor, t.repetition * 7);
   }
-  throw new Error(`Invalid repetition unit: ${t.repetition_unit}`);
+  throw new Error(`Invalid repetition unit: ${t.repeat_unit}`);
 }
 
 export function calculateExpectedDoses(
