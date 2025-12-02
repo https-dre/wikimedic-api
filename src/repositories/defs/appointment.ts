@@ -1,3 +1,4 @@
+import { Treatment } from "@/types/appointment";
 import { Appointment } from "../../models/Appointment";
 
 export interface IAppointmentRepository {
@@ -7,4 +8,5 @@ export interface IAppointmentRepository {
   deleteById(id: string): Promise<void>;
   updateWithId(id: string, fields: Partial<Omit<Appointment, "id">>): Promise<void>;
   findWithDateFilter(userId: string, filter: Date): Promise<Appointment[]>;
+  getTreatmentsByUserId(user_id: string, month: number, year: number): Promise<Treatment[]>;
 }
