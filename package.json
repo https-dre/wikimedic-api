@@ -8,7 +8,7 @@
     "lint": "eslint . --ext .ts",
     "build": "tsup src --format esm",
     "start": "node ./dist/index.mjs",
-    "sql:schema": "tsx --env-file .env src/data/postgresql/schema/index.ts"
+    "sql:schema": "tsx --env-file .env src/infra/sql/schema/index.ts"
   },
   "author": "André de Oliveira Dias",
   "license": "ISC",
