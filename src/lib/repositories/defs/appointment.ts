@@ -1,5 +1,5 @@
-import { Treatment } from "@/types/appointment";
-import { Appointment } from "../../models/Appointment";
+import { Treatment } from "@/lib/types/appointment";
+import { Appointment } from "@/models/Appointment";
 
 export interface IAppointmentRepository {
   save(data: Omit<Appointment, "id">): Promise<Appointment>;

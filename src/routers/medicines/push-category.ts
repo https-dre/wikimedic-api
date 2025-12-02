@@ -1,6 +1,6 @@
-import { db } from "@/data/postgresql/db";
+import { db } from "@/infra/sql";
 import { Medicine } from "@/models/Medicine";
-import { Category } from "@/types/categories";
+import { Category } from "@/lib/types/categories";
 import { FastifyInstance, FastifyPluginAsync } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";

@@ -1,14 +1,14 @@
 import postgres from "postgres";
-import EnvConfig from "../../env-config";
-import { logger } from "../../logger";
+import { config } from "@/lib/config";
+import { logger } from "@/lib/logger";
 
 const db = postgres({
-  user: EnvConfig.get("PGUSER"),
-  host: EnvConfig.get("PGHOST"),
+  user: config.get("PGUSER"),
+  host: config.get("PGHOST"),
   port: 5432,
-  password: EnvConfig.get("PGPASSWORD"),
-  db: EnvConfig.get("PGDATABASE"),
-  ssl: EnvConfig.get("PGSSLMODE") as
+  password: config.get("PGPASSWORD"),
+  db: config.get("PGDATABASE"),
+  ssl: config.get("PGSSLMODE") as
     | boolean
     | object
     | "require"

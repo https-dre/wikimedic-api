@@ -1,9 +1,14 @@
 import fastifySwagger from "@fastify/swagger";
 import fastify from "fastify";
-import { jsonSchemaTransform, serializerCompiler, validatorCompiler, ZodTypeProvider } from "fastify-type-provider-zod";
-import { ServerErrorHandler } from "./error-handler";
-import { logger } from "./logger";
-import { main_router } from "./routers";
+import {
+  jsonSchemaTransform,
+  serializerCompiler,
+  validatorCompiler,
+  ZodTypeProvider,
+} from "fastify-type-provider-zod";
+import { ServerErrorHandler } from "@/lib/errors/error-handler";
+import { logger } from "@/lib/logger";
+import { main_router } from "@/routers";
 
 export const buildApp = () => {
   const app = fastify().withTypeProvider<ZodTypeProvider>();
@@ -37,7 +42,7 @@ export const buildApp = () => {
     );
   }
 
-/*   app.addHook("onRequest", async (request, reply) => {
+  /*   app.addHook("onRequest", async (request, reply) => {
     const filter = ["post", "put", "delete"];
     const req_method = request.method.toLowerCase();
     const methods = filter.filter((e) => e == req_method);
@@ -59,4 +64,4 @@ export const buildApp = () => {
 
   app.decorateRequest("contextData", undefined);
   return app;
-}
+};

@@ -1,5 +1,5 @@
 import { AppointmentService } from "@/services/appointment-service";
-import { zTreatmentSummary_Item } from "@/types/appointment";
+import { zTreatmentSummary_Item } from "@/lib/types/appointment";
 import { FastifyPluginAsync } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";

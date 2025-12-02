@@ -2,7 +2,7 @@ import { FastifyPluginAsync } from "fastify";
 import { AppointmentService } from "../../services/appointment-service";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
-import { zAppointment } from "../../models/Appointment";
+import { zAppointment } from "@/models/Appointment";
 
 export const createAppointment = (
   service: AppointmentService

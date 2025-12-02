@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
-import { Appointment } from "../../models/Appointment";
+import { Appointment } from "@/models/Appointment";
 import { IAppointmentRepository } from "../defs/appointment";
 import postgres from "postgres";
-import { Treatment } from "@/types/appointment";
+import { Treatment } from "@/lib/types/appointment";
 import { endOfMonth, startOfMonth } from "date-fns";
 
 export class AppointmentRepository implements IAppointmentRepository {

@@ -1,4 +1,4 @@
-import { User } from "../../models/User";
+import { User } from "@/models/User";
 
 export interface IUserRepository {
   save(data: Omit<User, "id" | "created_at">): Promise<User>;

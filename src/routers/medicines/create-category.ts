@@ -1,5 +1,5 @@
-import { db } from "@/data/postgresql/db";
-import { Category, zCategory } from "@/types/categories";
+import { db } from "@/infra/sql";
+import { Category, zCategory } from "@/lib/types/categories";
 import { FastifyInstance, FastifyPluginAsync } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { randomUUID } from "node:crypto";

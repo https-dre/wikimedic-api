@@ -2,13 +2,13 @@
   "name": "server_wikimedic",
   "version": "1.0.0",
   "description": "HttpServer to Wikimedic",
-  "main": "./dist/Server.js",
+  "main": "./src/index.ts",
   "scripts": {
-    "dev": "tsx watch --env-file .env src/Server.ts",
+    "dev": "tsx watch --env-file .env src/index.ts",
     "lint": "eslint . --ext .ts",
     "build": "tsup src --format esm",
-    "start": "node ./dist/Server.mjs",
-    "sql:schema": "tsx --env-file .env src/data/postgresql/schema/index.ts"
+    "start": "node ./dist/index.mjs",
+    "sql:schema": "tsx --env-file .env src/infra/sql/schema/index.ts"
   },
   "author": "André de Oliveira Dias",
   "license": "ISC",

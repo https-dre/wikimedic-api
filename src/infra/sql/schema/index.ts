@@ -1,5 +1,5 @@
 import path from "path";
-import { logger } from "../../../logger";
+import { logger } from "../@/lib/logger";
 import { db } from "../db";
 import * as fs from "node:fs";
 

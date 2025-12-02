@@ -1,10 +1,10 @@
-import { db } from "../data/postgresql/db";
-import { JwtProvider } from "../providers/crypto-provider";
-import { AppointmentRepository, DoseRecordRepository, UserSqlRepository } from "../repositories";
+import { db } from "@/infra/sql";
+import { JwtProvider } from "../lib/providers/crypto-provider";
+import { AppointmentRepository, DoseRecordRepository, UserSqlRepository } from "@/lib/repositories";
 import { MedicService } from "../services/medic-service";
 import { UserService } from "../services/user-service";
 import { AppointmentService } from "../services/appointment-service";
-import { MedicineRepository } from "@/repositories/postgresql/MedicineRepository";
+import { MedicineRepository } from "@/lib/repositories/postgresql/MedicineRepository";
 
 const jwtProvider = new JwtProvider();
 const userSqlRepository = new UserSqlRepository(db);

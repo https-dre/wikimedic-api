@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { logger } from "./logger";
+import { logger } from "@/lib/logger";
 
-const EnvConfig = new Map<string, string>(
+export const config = new Map<string, string>(
   Object.entries(process.env).filter(
     (entry): entry is [string, string] => entry[1] !== undefined
   )
@@ -36,6 +36,4 @@ export const verify_env = () => {
   validateEnv();
   logger.info("Environment ok!");
 };
-
-export default EnvConfig;
 

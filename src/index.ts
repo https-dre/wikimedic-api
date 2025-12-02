@@ -1,7 +1,7 @@
-import { logger } from "./logger";
-import { verify_env } from "./env-config";
-import { buildApp } from "./appBuild";
-import { testPostgreSqlConnection } from "./data/postgresql/db";
+import { logger } from "@/lib/logger";
+import { verify_env } from "@/lib/config";
+import { buildApp } from "@/infra/http";
+import { testPostgreSqlConnection } from "@/infra/sql";
 const port = process.env.PORT || "7711";
 
 const run = async () => {

@@ -1,5 +1,5 @@
-import { db } from "@/data/postgresql/db";
-import { listUsersFromDb } from "@/functions/list-users";
+import { db } from "@/infra/sql";
+import { listUsersFromDb } from "@/lib/functions/list-users";
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { createCategory } from "../medicines/create-category";
