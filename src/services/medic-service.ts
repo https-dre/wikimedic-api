@@ -43,4 +43,13 @@ export class MedicService {
     const medicines = await this.repository.listWithPagination(page, pageSize);
     return medicines;
   }
+
+  public async searchMedicineByName(name: string) {
+    const medicines = await this.repository.searchByName(name);
+    if(medicines.length == 0) {
+      throw new BadResponse("Nenhum medicamento encontrado.", 404);
+    }
+
+    return medicines;
+  }
 }

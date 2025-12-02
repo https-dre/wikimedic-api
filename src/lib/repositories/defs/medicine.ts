@@ -10,4 +10,5 @@ export interface IMedRepository {
     page?: number,
     pageSize?: number
   ): Promise<MedicineWithoutLeaflet[]>;
+  searchByName(name: string): Promise<MedicineWithoutLeaflet[]>;
 }
