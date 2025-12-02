@@ -2,6 +2,7 @@ import { BadResponse } from "../error-handler";
 import { Appointment, DoseRecord } from "../models/Appointment";
 import {
   IAppointmentRepository,
+  IDoseRecordRepository,
   IMedRepository,
   IUserRepository,
 } from "../repositories";
@@ -10,7 +11,8 @@ export class AppointmentService {
   constructor(
     private medicineRepository: IMedRepository,
     private appointmentRepository: IAppointmentRepository,
-    private userRepository: IUserRepository
+    private userRepository: IUserRepository,
+    private doseRepository: IDoseRecordRepository,
   ) {}
 
   public async save(data: Omit<Appointment, "id">) {
@@ -67,6 +69,7 @@ export class AppointmentService {
     if(!await this.appointmentRepository.findById(data.appointment_id))
       throw new BadResponse("Agendamento não encontrado.", 404);
 
-    
+    const created = await this.doseRepository.save(data);
+    return created;
   }
 }

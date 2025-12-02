@@ -1,6 +1,6 @@
 import { db } from "../data/postgresql/db";
 import { JwtProvider } from "../providers/crypto-provider";
-import { AppointmentRepository, UserSqlRepository } from "../repositories";
+import { AppointmentRepository, DoseRecordRepository, UserSqlRepository } from "../repositories";
 import { MedicService } from "../services/medic-service";
 import { UserService } from "../services/user-service";
 import { AppointmentService } from "../services/appointment-service";
@@ -10,6 +10,7 @@ const jwtProvider = new JwtProvider();
 const userSqlRepository = new UserSqlRepository(db);
 const appointmentRepository = new AppointmentRepository(db);
 const medicineRepository = new MedicineRepository(db);
+const doseRepository = new DoseRecordRepository(db);
 
 const appServices = {
   user: new UserService(userSqlRepository, jwtProvider),
@@ -17,7 +18,8 @@ const appServices = {
   appointment: new AppointmentService(
     medicineRepository,
     appointmentRepository,
-    userSqlRepository
+    userSqlRepository,
+    doseRepository
   ),
 };
 
