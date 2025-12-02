@@ -71,8 +71,8 @@ export class AppointmentRepository implements IAppointmentRepository {
     month: number,
     year: number
   ): Promise<Treatment[]> {
-    const monthStart = startOfMonth(new Date(year, month));
-    const monthEnd = endOfMonth(new Date(year, month));
+    const monthStart = startOfMonth(new Date(year, month-1));
+    const monthEnd = endOfMonth(new Date(year, month-1));
 
     const treatments = await this.sql<Treatment[]>`
         SELECT 

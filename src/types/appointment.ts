@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const zTreatment = z.object({
-  id: z.string().uuid(),
+  appointment_id: z.string().uuid(),
   start_time: z.coerce.date(),
   end_time: z.coerce.date(),
   repetition: z.coerce.number(),

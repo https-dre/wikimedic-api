@@ -81,8 +81,8 @@ export class AppointmentService {
     month: number,
     year: number
   ): Promise<TreatmentSummary_Item[]> {
-    const monthStart = startOfMonth(new Date(year, month));
-    const monthEnd = endOfMonth(new Date(year, month));
+    const monthStart = startOfMonth(new Date(year, month-1));
+    const monthEnd = endOfMonth(new Date(year, month-1));
 
     if (!(await this.userRepository.findById(user_id)))
       throw new BadResponse("Usuário não encontrado");
@@ -101,7 +101,7 @@ export class AppointmentService {
           : Math.round((t.taken_count / expectedCount) * 100);
 
       return {
-        id: t.id,
+        id: t.appointment_id,
         medicine_name: t.commercial_name,
         dosage: `${t.amount} ${t.dosage_unit}`, // Ex: "30 mg" ou "1 Comprimido"
         color: t.color,
@@ -113,6 +113,7 @@ export class AppointmentService {
       };
     });
 
+    console.log(summary);
     return summary;
   }
 }
