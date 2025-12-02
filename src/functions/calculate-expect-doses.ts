@@ -1,59 +1,56 @@
+import { addHours, addDays, isBefore } from "date-fns";
 import { Treatment } from "@/types/appointment";
-import { addDays, addHours, isBefore } from "date-fns";
 
-function getMillisecondsPerUnit(unit: string): number {
-  const hour = 3600 * 1000;
-  if (unit === "HOUR") return hour;
-  if (unit === "DAY") return hour * 24;
-  if (unit === "WEEK") return hour * 24 * 7;
-  return 0;
+function advance(cursor: Date, t: Treatment) {
+  if (t.repetition_unit === "HOUR") {
+    return addHours(cursor, t.repetition);
+  }
+  if (t.repetition_unit === "DAY") {
+    return addDays(cursor, t.repetition);
+  }
+  if (t.repetition_unit === "WEEK") {
+    return addDays(cursor, t.repetition * 7);
+  }
+  throw new Error(`Invalid repetition unit: ${t.repetition_unit}`);
 }
 
 export function calculateExpectedDoses(
-  treatment: Treatment,
+  t: Treatment,
   windowStart: Date,
   windowEnd: Date
 ): number {
-  let count = 0;
 
-  // O cálculo começa na data do agendamento ou no início do mês (o que for maior)
-  let currentCursor = new Date(treatment.start_time);
+  // Segurança: evita loops infinitos
+  if (t.repetition <= 0) return 0;
 
-  // Se o tratamento começou ANTES desse mês, precisamos projetar a primeira dose DENTRO do mês
-  if (isBefore(currentCursor, windowStart)) {
-    // Aqui entra uma lógica para "avançar" o cursor até entrar na janela do mês
-    // baseada na repetição.
-    const msPerUnit =
-      getMillisecondsPerUnit(treatment.repetition_unit) * treatment.repetition;
-    const diff = windowStart.getTime() - currentCursor.getTime();
-    const jumps = Math.ceil(diff / msPerUnit);
-    currentCursor = new Date(currentCursor.getTime() + jumps * msPerUnit);
-  }
+  let cursor = new Date(t.start_time);
 
-  const actualEnd = treatment.end_time
-    ? new Date(Math.min(treatment.end_time.getTime(), windowEnd.getTime()))
+  // End time real da janela
+  const end = t.end_time
+    ? new Date(Math.min(t.end_time.getTime(), windowEnd.getTime()))
     : windowEnd;
 
-  // Loop simulando as doses para contar quantas caem neste mês
-  while (
-    isBefore(currentCursor, actualEnd) ||
-    currentCursor.getTime() === actualEnd.getTime()
-  ) {
-    if (currentCursor >= windowStart) {
-      count++;
-    }
+  let count = 0;
 
-    // Avançar o tempo
-    if (treatment.repetition_unit === "HOUR") {
-      currentCursor = addHours(currentCursor, treatment.repetition);
-    } else if (treatment.repetition_unit === "DAY") {
-      currentCursor = addDays(currentCursor, treatment.repetition);
-    } else if (treatment.repetition_unit === "WEEK") {
-      currentCursor = addDays(currentCursor, treatment.repetition * 7);
-    } else {
-      break; // Segurança
-    }
+  //
+  // 1. Avança até entrar na janela do mês
+  // (usando SOMENTE date-fns, sem milissegundos → evita bugs de DST)
+  //
+  while (isBefore(cursor, windowStart)) {
+    cursor = advance(cursor, t);
+
+    // Caso o avanço seja grande demais e passe TOTALMENTE do mês
+    if (isBefore(end, cursor)) return 0;
   }
 
+  //
+  // 2. Conta todas as doses dentro da janela
+  //
+  while (!isBefore(end, cursor)) {
+    if (cursor >= windowStart && cursor <= windowEnd) {
+      count++;
+    }
+    cursor = advance(cursor, t);
+  }
   return count;
 }
