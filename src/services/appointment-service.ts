@@ -1,3 +1,4 @@
+import { endOfMonth, startOfMonth } from "date-fns";
 import { BadResponse } from "../error-handler";
 import { Appointment, DoseRecord } from "../models/Appointment";
 import {
@@ -6,13 +7,15 @@ import {
   IMedRepository,
   IUserRepository,
 } from "../repositories";
+import { calculateExpectedDoses } from "@/functions/calculate-expect-doses";
+import { TreatmentSummary_Item } from "@/types/appointment";
 
 export class AppointmentService {
   constructor(
     private medicineRepository: IMedRepository,
     private appointmentRepository: IAppointmentRepository,
     private userRepository: IUserRepository,
-    private doseRepository: IDoseRecordRepository,
+    private doseRepository: IDoseRecordRepository
   ) {}
 
   public async save(data: Omit<Appointment, "id">) {
@@ -66,10 +69,50 @@ export class AppointmentService {
   }
 
   public async pushDoseRecord(data: Omit<DoseRecord, "id">) {
-    if(!await this.appointmentRepository.findById(data.appointment_id))
+    if (!(await this.appointmentRepository.findById(data.appointment_id)))
       throw new BadResponse("Agendamento não encontrado.", 404);
 
     const created = await this.doseRepository.save(data);
     return created;
+  }
+
+  public async getTreatmentSummary(
+    user_id: string,
+    month: number,
+    year: number
+  ): Promise<TreatmentSummary_Item[]> {
+    const monthStart = startOfMonth(new Date(year, month));
+    const monthEnd = endOfMonth(new Date(year, month));
+
+    if (!(await this.userRepository.findById(user_id)))
+      throw new BadResponse("Usuário não encontrado");
+
+    const treatments = await this.appointmentRepository.getTreatmentsByUserId(
+      user_id,
+      month,
+      year
+    );
+
+    const summary: TreatmentSummary_Item[] = treatments.map((t) => {
+      const expectedCount = calculateExpectedDoses(t, monthStart, monthEnd);
+      const progress =
+        expectedCount === 0
+          ? 0
+          : Math.round((t.taken_count / expectedCount) * 100);
+
+      return {
+        id: t.id,
+        medicine_name: t.commercial_name,
+        dosage: `${t.amount} ${t.dosage_unit}`, // Ex: "30 mg" ou "1 Comprimido"
+        color: t.color,
+        stats: {
+          taken: t.taken_count,
+          total: expectedCount,
+          percentage: progress,
+        },
+      };
+    });
+
+    return summary;
   }
 }
