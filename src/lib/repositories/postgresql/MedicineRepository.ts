@@ -74,4 +74,31 @@ export class MedicineRepository implements IMedRepository {
       .sql`SELECT * FROM medicines WHERE registry_code = ${code}`;
     return med;
   }
+
+  public async searchByName(name: string): Promise<MedicineWithoutLeaflet[]> {
+    const medicines = await this.sql<MedicineWithoutLeaflet[]>`
+      SELECT 
+        m.id, 
+        m.commercial_name, 
+        m.registry_code, 
+        m.created_at,
+        m.description, 
+        COALESCE(
+          JSON_AGG(c.name) FILTER (WHERE c.name IS NOT NULL), 
+          '[]'
+        ) AS categories,
+        mi.url AS image
+      FROM medicines m
+      LEFT JOIN LATERAL (
+        SELECT url FROM medicine_images img
+        WHERE img.medicine_id = m.id
+        ORDER BY img.created_at ASC
+      ) mi ON TRUE
+      LEFT JOIN medicine_category mc ON m.id = mc.medicine_id
+      LEFT JOIN categories c ON mc.category_id = c.id
+      WHERE LOWER(m.commercial_name) LIKE LOWER('%' || ${name} || '%')
+      GROUP BY m.id, mi.url
+    `;
+    return medicines;
+  }
 }
