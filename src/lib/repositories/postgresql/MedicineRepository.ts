@@ -2,6 +2,7 @@ import postgres from "postgres";
 import { IMedRepository } from "../defs/medicine";
 import { Medicine, MedicineWithoutLeaflet } from "@/models/Medicine";
 import { randomUUID } from "node:crypto";
+import { MedicinePhoto } from "@/lib/types/medicine";
 
 export class MedicineRepository implements IMedRepository {
   constructor(private sql: postgres.Sql) {}
@@ -100,5 +101,35 @@ export class MedicineRepository implements IMedRepository {
       GROUP BY m.id, mi.url
     `;
     return medicines;
+  }
+
+  public async createMedicinePhoto(
+    data: MedicinePhoto
+  ): Promise<MedicinePhoto> {
+    const [photo] = await this.sql<
+      MedicinePhoto[]
+    >`INSERT INTO medicine_images ${this.sql(data)}`;
+    return photo;
+  }
+
+  public async deleteMedicinePhoto(id: string): Promise<void> {
+    await this.sql`DELETE FROM medicine_images WHERE id = ${id}`;
+  }
+
+  public async listMedicinePhotos(
+    medicine_id: string
+  ): Promise<MedicinePhoto[]> {
+    const photos = await this.sql<
+      MedicinePhoto[]
+    >`SELECT * FROM medicine_images WHERE medicine_id = ${medicine_id}`;
+
+    return photos;
+  }
+
+  public async findMedicinePhoto(id: string): Promise<MedicinePhoto> {
+    const [photo] = await this.sql<
+      MedicinePhoto[]
+    >`SELECT * FROM medicine_images WHERE id = ${id}`;
+    return photo;
   }
 }

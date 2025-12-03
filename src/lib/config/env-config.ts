@@ -9,10 +9,10 @@ export const config = new Map<string, string>(
 
 const envSchema = z.object({
   MONGO_URL: z.string().url(),
-  BUCKET_NAME: z.string().optional(),
-  AWS_ACCESS_KEY_ID: z.string().optional(),
-  AWS_SECRET_ACCESS_KEY: z.string().optional(),
-  AWS_REGION: z.string().optional(),
+  AWS_BUCKET: z.string(),
+  AWS_ACCESS_KEY_ID: z.string(),
+  AWS_SECRET_ACCESS_KEY: z.string(),
+  AWS_REGION: z.string(),
   JWT_KEY: z.string(),
   APIKEY: z.string().optional(),
   PGUSER: z.string(),

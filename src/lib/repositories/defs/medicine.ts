@@ -1,3 +1,4 @@
+import { MedicinePhoto } from "@/lib/types/medicine";
 import { Medicine, MedicineWithoutLeaflet } from "@/models/Medicine";
 
 export interface IMedRepository {
@@ -11,4 +12,8 @@ export interface IMedRepository {
     pageSize?: number
   ): Promise<MedicineWithoutLeaflet[]>;
   searchByName(name: string): Promise<MedicineWithoutLeaflet[]>;
+  createMedicinePhoto(data: MedicinePhoto): Promise<MedicinePhoto>;
+  deleteMedicinePhoto(id: string): Promise<void>;
+  listMedicinePhotos(medicine_id: string): Promise<MedicinePhoto[]>;
+  findMedicinePhoto(id: string): Promise<MedicinePhoto>;
 }
