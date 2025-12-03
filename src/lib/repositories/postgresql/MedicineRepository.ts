@@ -66,7 +66,17 @@ export class MedicineRepository implements IMedRepository {
 
   public async findById(id: string): Promise<Medicine | null> {
     const [med]: Medicine[] = await this
-      .sql`SELECT * FROM medicines WHERE id = ${id}`;
+      .sql`
+      SELECT 
+        m.*, 
+        COALESCE(JSON_AGG(c.name) FILTER (WHERE c.name IS NOT NULL), '[]') AS categories
+        FROM medicines m
+        LEFT JOIN medicine_category mc ON m.id = mc.medicine_id
+        LEFT JOIN categories c ON c.id = mc.category_id
+        WHERE m.id = ${id}
+        GROUP BY m.id
+        ORDER BY created_at DESC
+      `;
     return med;
   }
 

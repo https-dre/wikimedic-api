@@ -10,10 +10,16 @@ import { ServerErrorHandler } from "@/lib/errors/error-handler";
 import { logger } from "@/lib/logger";
 import { main_router } from "@/routers";
 
+import cors from "@fastify/cors";
+
 export const buildApp = () => {
   const app = fastify().withTypeProvider<ZodTypeProvider>();
 
-  app.register(import("@fastify/cors"));
+  app.register(cors, {
+    origin: true,
+    allowedHeaders: ["Content-Type", "Authorization", "APIKEY"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  });
 
   app.register(import("@fastify/multipart"));
 

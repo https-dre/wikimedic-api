@@ -2,6 +2,7 @@ import { S3Provider } from "./s3-provider"; // Importe seu S3Provider
 import { IMedRepository } from "@/lib/repositories";
 import { randomUUID } from "node:crypto"; // Para gerar o ID local, caso o DB não gere
 import { MedicinePhoto } from "../types/medicine";
+import { BadResponse } from "../errors/error-handler";
 
 export class MedicineMediaProvider {
   constructor(
@@ -24,13 +25,18 @@ export class MedicineMediaProvider {
   ): Promise<MedicinePhoto> {
     // 1. **Upload para o S3**
     // O S3Provider gerará uma chave única (UUID) para o arquivo
+    const medicine = await this.medicineRepository.findById(medicineId);
+    if(!medicine) {
+      throw new BadResponse("Medicamento não encontrado.", 404);
+    }
+    
     const uploadedFile = await this.s3Provider.uploadFile(
       fileType,
       fileContent
     );
 
     if (!uploadedFile) {
-      throw new Error("Falha ao fazer upload da foto para o S3.");
+      throw new BadResponse("Falha ao fazer upload da foto para o S3.");
     }
 
     // 2. **Registro no Banco de Dados**
@@ -47,7 +53,7 @@ export class MedicineMediaProvider {
       newPhotoData
     );
 
-    return photoEntity;
+    return newPhotoData;
   }
 
   /**
