@@ -28,10 +28,10 @@ export class S3Provider {
     type: string,
     content: Buffer
   ): Promise<FileInCloud | null> {
-    const fileKey = randomUUID();
+    const fileKey = `${this.folder}/${randomUUID()}`;
     const command = new PutObjectCommand({
       Bucket: this.bucket,
-      Key: `${this.folder}/${fileKey}`,
+      Key: fileKey,
       Body: content,
       ContentType: type,
     });

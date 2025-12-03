@@ -2,6 +2,7 @@ import postgres from "postgres";
 import { IMedRepository } from "../defs/medicine";
 import { Medicine, MedicineWithoutLeaflet } from "@/models/Medicine";
 import { randomUUID } from "node:crypto";
+import { MedicinePhoto } from "@/lib/types/medicine";
 
 export class MedicineRepository implements IMedRepository {
   constructor(private sql: postgres.Sql) {}
@@ -65,7 +66,17 @@ export class MedicineRepository implements IMedRepository {
 
   public async findById(id: string): Promise<Medicine | null> {
     const [med]: Medicine[] = await this
-      .sql`SELECT * FROM medicines WHERE id = ${id}`;
+      .sql`
+      SELECT 
+        m.*, 
+        COALESCE(JSON_AGG(c.name) FILTER (WHERE c.name IS NOT NULL), '[]') AS categories
+        FROM medicines m
+        LEFT JOIN medicine_category mc ON m.id = mc.medicine_id
+        LEFT JOIN categories c ON c.id = mc.category_id
+        WHERE m.id = ${id}
+        GROUP BY m.id
+        ORDER BY created_at DESC
+      `;
     return med;
   }
 
@@ -100,5 +111,35 @@ export class MedicineRepository implements IMedRepository {
       GROUP BY m.id, mi.url
     `;
     return medicines;
+  }
+
+  public async createMedicinePhoto(
+    data: MedicinePhoto
+  ): Promise<MedicinePhoto> {
+    const [photo] = await this.sql<
+      MedicinePhoto[]
+    >`INSERT INTO medicine_images ${this.sql(data)}`;
+    return photo;
+  }
+
+  public async deleteMedicinePhoto(id: string): Promise<void> {
+    await this.sql`DELETE FROM medicine_images WHERE id = ${id}`;
+  }
+
+  public async listMedicinePhotos(
+    medicine_id: string
+  ): Promise<MedicinePhoto[]> {
+    const photos = await this.sql<
+      MedicinePhoto[]
+    >`SELECT * FROM medicine_images WHERE medicine_id = ${medicine_id}`;
+
+    return photos;
+  }
+
+  public async findMedicinePhoto(id: string): Promise<MedicinePhoto> {
+    const [photo] = await this.sql<
+      MedicinePhoto[]
+    >`SELECT * FROM medicine_images WHERE id = ${id}`;
+    return photo;
   }
 }

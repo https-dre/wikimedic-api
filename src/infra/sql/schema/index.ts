@@ -1,6 +1,6 @@
 import path from "path";
-import { logger } from "../@/lib/logger";
-import { db } from "../db";
+import { logger } from "@/lib/logger";
+import { db } from "../";
 import * as fs from "node:fs";
 
 const runSchema = async () => {
