@@ -7,6 +7,8 @@ import { uploadMedicinePhoto } from "./medicines/upload-medicine-photo";
 import { appProviders } from "@/generators/app-providers";
 import { listMedicinePhotos } from "./medicines/list-medicine-photos";
 import { deleteMedicinePhoto } from "./medicines/delete-medicine-photo";
+import { updateMedicieFields } from "./medicines/update-medicine-fields";
+import { updateMedicineLeaflet } from "./medicines/update-medicine-leaflet";
 
 export const med_routes = async (app: FastifyInstance) => {
   app.register(listMedicines(appServices.med));
@@ -21,4 +23,8 @@ export const med_routes = async (app: FastifyInstance) => {
   app.register(deleteMedicinePhoto, {
     medicineMediaProvider: appProviders.medicineMedia,
   });
+  app.register(updateMedicieFields, {
+    service: appServices.med,
+  });
+  app.register(updateMedicineLeaflet);
 };

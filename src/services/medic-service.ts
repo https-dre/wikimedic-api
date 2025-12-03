@@ -2,6 +2,11 @@ import { Medicine, MedicineWithoutLeaflet } from "../models/Medicine";
 import { IMedRepository } from "@/lib/repositories/.";
 import { BadResponse } from "@/lib/errors/error-handler";
 
+type MedicineUpdated = Omit<
+  Medicine,
+  "id" | "created_at" | "image" | "categories"
+>;
+
 export class MedicService {
   constructor(private repository: IMedRepository) {}
 
@@ -46,10 +51,21 @@ export class MedicService {
 
   public async searchMedicineByName(name: string) {
     const medicines = await this.repository.searchByName(name);
-    if(medicines.length == 0) {
+    if (medicines.length == 0) {
       throw new BadResponse("Nenhum medicamento encontrado.", 404);
     }
 
     return medicines;
+  }
+
+  public async updateMedicineWithoutLeaflet(
+    medicine_id: string,
+    fields: Partial<Omit<MedicineUpdated, "leaflet_data">>
+  ) {
+    const medicine = await this.repository.findById(medicine_id);
+    if(!medicine)
+      throw new BadResponse("Medicamento não encontrado!");
+
+    await this.repository.update(fields, medicine_id);
   }
 }
