@@ -1,15 +1,26 @@
-FROM node:22 AS build
-
+FROM node:22-alpine AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
+
+FROM base AS deps
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+FROM base AS build
 COPY . .
-RUN npm run build
+COPY --from=deps /app/node_modules ./node_modules
+RUN pnpm build
+RUN pnpm prune --prod
 
-FROM node:22-alpine AS production
-
+FROM base AS deploy
 WORKDIR /app
+
 COPY --from=build /app/dist ./dist
-COPY package*.json ./
-RUN npm install --omit=dev
-CMD ["npm", "start"]
+COPY --from=build /app/node_modules ./node_modules
+COPY package.json ./
+
+USER node
+
+CMD ["pnpm", "start"]
