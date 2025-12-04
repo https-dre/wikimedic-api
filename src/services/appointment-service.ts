@@ -132,4 +132,12 @@ export class AppointmentService {
     );
     return records;
   }
+
+  public async findWithDateFiler(user_id: string, filter: Date) {
+    const appts = await this.appointmentRepository.findWithDateFilter(
+      user_id,
+      filter
+    );
+    return appts;
+  }
 }
