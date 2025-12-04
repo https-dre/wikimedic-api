@@ -30,9 +30,8 @@ export const buildApp = () => {
     swagger: {
       info: {
         title: "Wikimedic API",
-        description:
-          "To execute POST, PUT, and DELETE requests, the request must include the APIKEY header.",
-        version: "2.0.0",
+        description: "Referência para usar API da Wikimedic.",
+        version: "3.0.0",
       },
     },
     transform: jsonSchemaTransform,
@@ -64,7 +63,7 @@ export const buildApp = () => {
   app.register(import("@scalar/fastify-api-reference"), {
     routePrefix: "/openapi",
     configuration: {
-      theme: "kepler",
+      theme: "dark",
     },
   });
 
