@@ -22,5 +22,15 @@ export const zDoseRecord = z.object({
   notes: z.string().optional().nullable(),
 });
 
+export const zDoseRecordJoin = zDoseRecord.merge(
+  z.object({
+    medicine_name: z.string(),
+    amount: z.string(),
+    dosage_unit: z.string(),
+    color: z.string(),
+  })
+);
+
 export type DoseRecord = z.infer<typeof zDoseRecord>;
+export type DoseRecord_Join = z.infer<typeof zDoseRecordJoin>;
 export type Appointment = z.infer<typeof zAppointment>;

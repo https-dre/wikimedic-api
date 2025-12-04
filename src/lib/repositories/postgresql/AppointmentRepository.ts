@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { Appointment } from "@/models/Appointment";
+import { Appointment, DoseRecord, DoseRecord_Join } from "@/models/Appointment";
 import { IAppointmentRepository } from "../defs/appointment";
 import postgres from "postgres";
 import { Treatment } from "@/lib/types/appointment";
@@ -52,15 +52,30 @@ export class AppointmentRepository implements IAppointmentRepository {
     userId: string,
     filter: Date
   ): Promise<Appointment[]> {
-    const startOfDay = new Date(filter).setHours(0, 0, 0, 0);
-    const endOfDay = new Date(filter).setHours(23, 59, 59, 999);
+    // 1. Define o intervalo do dia que queremos checar (00:00 até 23:59)
+    const startOfDay = new Date(filter);
+    startOfDay.setHours(0, 0, 0, 0);
 
-    const result: Appointment[] = await this.sql`
-      SELECT *
-      FROM appointments
-      WHERE userId = ${userId}
-        AND startTime >= ${startOfDay}
-        AND startTime <= ${endOfDay}
+    const endOfDay = new Date(filter);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    /* LÓGICA:
+       Para um agendamento estar ativo "Hoje", ele tem que cumprir duas regras:
+       1. Ele deve ter começado ANTES (ou durante) o fim de hoje.
+       2. Ele deve terminar DEPOIS (ou durante) o início de hoje.
+    */
+
+    const result = await this.sql<Appointment[]>`
+      SELECT 
+        a.*, 
+        m.name AS medicine_name
+      FROM appointments a
+      LEFT JOIN medicines m ON a.medicine_id = m.id
+      WHERE a.userId = ${userId}
+        -- Começa antes do dia acabar
+        AND a.start_time <= ${endOfDay} 
+        -- E termina depois do dia começar (ou seja, ainda está valendo hoje)
+        AND a.end_time >= ${startOfDay}
     `;
 
     return result;
@@ -71,8 +86,8 @@ export class AppointmentRepository implements IAppointmentRepository {
     month: number,
     year: number
   ): Promise<Treatment[]> {
-    const monthStart = startOfMonth(new Date(year, month-1));
-    const monthEnd = endOfMonth(new Date(year, month-1));
+    const monthStart = startOfMonth(new Date(year, month - 1));
+    const monthEnd = endOfMonth(new Date(year, month - 1));
 
     const treatments = await this.sql<Treatment[]>`
         SELECT 
@@ -102,5 +117,29 @@ export class AppointmentRepository implements IAppointmentRepository {
             a.id, m.id
       `;
     return treatments;
+  }
+
+  public async getRecordsByUser_Id(
+    user_id: string,
+    month: number,
+    year: number
+  ): Promise<DoseRecord_Join[]> {
+    const records = await this.sql<
+      DoseRecord_Join[]
+    >`
+      SELECT d.*,
+      m.commercial_name AS medicine_name,
+      a.color AS color,
+      a.amount AS amount,
+      a.dosage_unit AS dosage_unit
+      FROM dose_records d
+      LEFT JOIN appointments a ON d.appointment_id = a.id
+      LEFT JOIN medicines m ON a.medicine_id = m.id
+      WHERE a.user_id = ${user_id}
+      AND EXTRACT(MONTH FROM taken_at) = ${month}
+      AND EXTRACT(YEAR FROM taken_at) = ${year}
+      ORDER BY taken_at DESC
+    `;
+    return records;
   }
 }

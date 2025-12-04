@@ -81,8 +81,8 @@ export class AppointmentService {
     month: number,
     year: number
   ): Promise<TreatmentSummary_Item[]> {
-    const monthStart = startOfMonth(new Date(year, month-1));
-    const monthEnd = endOfMonth(new Date(year, month-1));
+    const monthStart = startOfMonth(new Date(year, month - 1));
+    const monthEnd = endOfMonth(new Date(year, month - 1));
 
     if (!(await this.userRepository.findById(user_id)))
       throw new BadResponse("Usuário não encontrado");
@@ -115,5 +115,21 @@ export class AppointmentService {
 
     console.log(summary);
     return summary;
+  }
+
+  public async getDoseRecordsByUserId(
+    user_id: string,
+    year: number,
+    month: number
+  ) {
+    const user = await this.userRepository.findById(user_id);
+    if (!user) throw new BadResponse("Usuário não encontrado.", 404);
+
+    const records = await this.appointmentRepository.getRecordsByUser_Id(
+      user_id,
+      year,
+      month
+    );
+    return records;
   }
 }
