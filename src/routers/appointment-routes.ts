@@ -6,6 +6,7 @@ import { listAppointmentsByUserId } from "./appointment/list-appointments-by-use
 import { createDoseRecord } from "./appointment/create-dose-record";
 import { getTreatmentSummary } from "./appointment/get-treatment-summary";
 import { getUserDoseRecords } from "./appointment/get-user-dose-records";
+import { findAppointmentsWithDateFiler } from "./appointment/find-appointments-for-date";
 
 export const appointment_routes = (app: FastifyInstance) => {
   app.register(createAppointment(appServices.appointment));
@@ -14,6 +15,9 @@ export const appointment_routes = (app: FastifyInstance) => {
   app.register(createDoseRecord(appServices.appointment));
   app.register(getTreatmentSummary(appServices.appointment));
   app.register(getUserDoseRecords, {
+    service: appServices.appointment,
+  });
+  app.register(findAppointmentsWithDateFiler, {
     service: appServices.appointment,
   });
 };
