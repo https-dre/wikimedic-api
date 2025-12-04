@@ -3,7 +3,7 @@ import { IFavoriteRepository } from "../defs/favorite";
 import { Favorite } from "@/models/Favorite";
 import { randomUUID } from "node:crypto";
 
-export class FavoriteRepository implements IFavoriteRepository {
+export class FavoriteSQLRepository implements IFavoriteRepository {
   constructor(private sql: postgres.Sql) {}
 
   public async save(data: Omit<Favorite, "id">): Promise<Favorite> {
@@ -22,7 +22,14 @@ export class FavoriteRepository implements IFavoriteRepository {
 
   public async findByUserId(userId: string): Promise<Favorite[]> {
     const favorites: Favorite[] = await this
-      .sql`SELECT * FROM favorites WHERE userId = ${userId}`;
+      .sql`
+        SELECT f.*,
+        m.commercial_name AS "medicineName"
+        FROM favorites f
+        JOIN medicines m ON f.medicine_id = m.id
+        WHERE f.user_id = ${userId}
+        ORDER BY LOWER(m.commercial_name) ASC
+      `;
     return favorites;
   }
 }
