@@ -30,7 +30,7 @@ export class AppointmentRepository implements IAppointmentRepository {
     pageSize: number = 10
   ): Promise<Appointment[]> {
     const result: Appointment[] = await this
-      .sql`SELECT * FROM appointments WHERE userId = ${userId}
+      .sql`SELECT * FROM appointments WHERE user_id = ${userId}
       LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}`;
     return result;
   }
